@@ -1,3 +1,4 @@
 Flask==0.10.1
 flask-mongoengine==0.7.5
 Flask-RESTful==0.3.5
+tox==2.3.1

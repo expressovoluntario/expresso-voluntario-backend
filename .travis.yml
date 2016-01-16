@@ -1,0 +1,10 @@
+language: python
+services:
+  - mongodb
+
+before_script:
+  - sleep 15
+
+script:
+  - tox
+
