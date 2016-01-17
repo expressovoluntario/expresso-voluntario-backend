@@ -12,7 +12,9 @@ db = MongoEngine(app)
 
 from ong.resources import ong_blueprint
 from task.resources import task_blueprint
+from user.resources import user_blueprint
 
 # registra os blueprints
 app.register_blueprint(ong_blueprint)
 app.register_blueprint(task_blueprint)
+app.register_blueprint(user_blueprint)
