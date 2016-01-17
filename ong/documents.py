@@ -4,7 +4,6 @@ from app import db
 
 
 class OngDocument(db.Document):
-
     name = db.StringField(required=True)
     description = db.StringField()
     tasks = db.ListField(db.ReferenceField(TaskDocument, reverse_delete_rule=mongoengine.PULL))
