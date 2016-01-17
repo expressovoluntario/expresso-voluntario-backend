@@ -5,14 +5,11 @@ from flask import Blueprint
 from flask_restful import Api, Resource, reqparse, abort
 from .documents import OngDocument
 
-ong_blueprint = Blueprint('api', __name__)
+ong_blueprint = Blueprint('ong', __name__)
 api = Api(ong_blueprint)
 
 
 class OngResource(Resource):
-
-    def __init__(self, *args, **kwargs):
-        pass
 
     def put(self, id=None):
         if id is None:
