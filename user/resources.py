@@ -31,13 +31,15 @@ class UserResource(Resource):
         parser.add_argument('name', required=True, type=str)
         parser.add_argument('email', required=True, type=str)
         parser.add_argument('password', required=True, type=str)
+        parser.add_argument('ongId', required=True, type=str)
         args = parser.parse_args(strict=True)
 
         name = args.get('name')
         email = args.get('email')
         password = args.get('password')
+        ongId = args.get('ongId')
 
-        user = UserDocument(name=name, email=email, password=password).save()
+        user = UserDocument(name=name, email=email, password=password, ongId=ongId).save()
 
         return user.to_dict(), 201
 
@@ -67,7 +69,7 @@ class UserResource(Resource):
         if to_update:
             ong_document.update(**to_update)
             return ong_document.to_dict(), 201
-            
+
         return ong_document.to_dict(), 201
 
 api.add_resource(
