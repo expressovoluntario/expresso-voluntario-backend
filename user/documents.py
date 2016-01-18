@@ -8,7 +8,7 @@ class UserDocument(db.Document):
     email = db.StringField(required=True, unique=True)
     password = db.StringField(required=True)
     createdAt = db.DateTimeField(default=datetime.datetime.now)
-    ongId = db.ReferenceField(OngDocument, reverse_delete_rule=mongoengine.PULL)
+    ong_id = db.ReferenceField(OngDocument, reverse_delete_rule=mongoengine.PULL)
 
     def to_dict(self):
         return {
@@ -17,5 +17,5 @@ class UserDocument(db.Document):
             'password': self.password,
             'createdAt': self.createdAt.strftime("%Y-%m-%d %H:%M:%S"),
             'id': str(self.id),
-            'ongId': str(self.ongId),
+            'ong_id': str(self.ong_id),
         }

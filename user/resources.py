@@ -31,15 +31,15 @@ class UserResource(Resource):
         parser.add_argument('name', required=True, type=str)
         parser.add_argument('email', required=True, type=str)
         parser.add_argument('password', required=True, type=str)
-        parser.add_argument('ongId', required=True, type=str)
+        parser.add_argument('ong_id', required=True, type=str)
         args = parser.parse_args(strict=True)
 
         name = args.get('name')
         email = args.get('email')
         password = args.get('password')
-        ongId = args.get('ongId')
+        ong_id = args.get('ong_id')
 
-        user = UserDocument(name=name, email=email, password=password, ongId=ongId).save()
+        user = UserDocument(name=name, email=email, password=password, ong_id=ong_id).save()
 
         return user.to_dict(), 201
 
