@@ -6,6 +6,7 @@ from flask_restful import Api, Resource, reqparse, abort
 from flask.ext.login import login_user
 from mongoengine import DoesNotExist
 from .documents import UserDocument
+from ong.documents import OngDocument
 
 user_blueprint = Blueprint('user', __name__)
 api = Api(user_blueprint)
@@ -23,9 +24,11 @@ class UserLoginResource(Resource):
 
         try:
             user = UserDocument.objects.get(email=email)
-            if user.password == password:
+            if user.check_password(password):
                 login_user(user)
                 return 200
+            else:
+                abort(401)
         except DoesNotExist:
             abort(401)
 
@@ -60,7 +63,7 @@ class UserResource(Resource):
         password = args.get('password')
         ong_id = args.get('ong_id')
 
-        user = UserDocument(name=name, email=email, password=password, ong_id=ong_id).save()
+        user = UserDocument(name=name, email=email, _password=password, ong_id=ong_id).save()
 
         return user.to_dict(), 201
 
