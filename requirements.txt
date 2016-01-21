@@ -3,4 +3,3 @@ flask-mongoengine==0.7.5
 Flask-RESTful==0.3.5
 Flask-Login==0.3.2
 bcrypt==2.0.0
-tox==2.3.1
