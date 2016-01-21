@@ -3,6 +3,7 @@ import json
 from app import app
 from ong.documents import OngDocument
 
+
 class OngTests(unittest.TestCase):
 
     def setUp(self):
@@ -18,7 +19,7 @@ class OngTests(unittest.TestCase):
         ongResponse = json.loads(response_data_decoded)
 
         self.assertEquals(response.status_code, 201)
-        #self.assertDictContains(ong, ongResponse)
+        #  self.assertDictContains(ong, ongResponse)
 
     def test_get_ong(self):
         ong = OngDocument(name='ONG 1', description='Lorem Ipsum').save()
@@ -37,4 +38,3 @@ class OngTests(unittest.TestCase):
 
         self.assertEquals(response.status_code, 200)
         self.assertEquals(len(ongs), 1)
-

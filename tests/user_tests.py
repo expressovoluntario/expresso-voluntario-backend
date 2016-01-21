@@ -2,6 +2,7 @@ import unittest
 from app import app
 from user.documents import UserDocument
 
+
 class LoginTests(unittest.TestCase):
 
     def setUp(self):

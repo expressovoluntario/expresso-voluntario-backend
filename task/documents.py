@@ -1,6 +1,7 @@
 import datetime
 from app import db
 
+
 class TaskDocument(db.Document):
     createdAt = db.DateTimeField(default=datetime.datetime.now)
     title = db.StringField(required=True)
