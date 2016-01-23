@@ -1,0 +1,7 @@
+[run]
+source =
+    ong/
+    task/
+    user/
+omit =
+    tests/*
