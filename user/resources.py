@@ -12,6 +12,7 @@ user_blueprint = Blueprint('user', __name__)
 api = Api(user_blueprint)
 
 
+@api.resource('/user/login/')
 class UserLoginResource(Resource):
 
     def get(self):
@@ -24,15 +25,17 @@ class UserLoginResource(Resource):
 
         try:
             user = UserDocument.objects.get(email=email)
+        except DoesNotExist:
+            abort(401)
+        else:
             if user.check_password(password):
                 login_user(user)
                 return 200
             else:
                 abort(401)
-        except DoesNotExist:
-            abort(401)
 
 
+@api.resource('/user/', '/user/<string:id>')
 class UserResource(Resource):
 
     def get(self, id=None):
@@ -95,13 +98,3 @@ class UserResource(Resource):
             return ong_document.to_dict(), 201
 
         return ong_document.to_dict(), 201
-
-api.add_resource(
-    UserResource,
-    '/user/',
-    '/user/<string:id>')
-
-api.add_resource(
-    UserLoginResource,
-    '/user/login/'
-)
