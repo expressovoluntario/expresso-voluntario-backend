@@ -65,6 +65,7 @@ class UserResource(Resource):
         parser.add_argument('email', required=True, type=str)
         parser.add_argument('password', required=True, type=str)
         parser.add_argument('ong_id', required=True, type=str)
+        # TODO: @willianribeiro: ong_id nao eh um parametro obrigratorio
         args = parser.parse_args(strict=True)
 
         name = args.get('name')

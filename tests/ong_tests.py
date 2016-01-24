@@ -16,10 +16,8 @@ class OngTests(unittest.TestCase):
         ong = {'name': 'Expresso Voluntário', 'description': 'Description'}
         response = self.client.post('/ong/', data=ong)
         response_data_decoded = response.data.decode()
-        ongResponse = json.loads(response_data_decoded)
 
         self.assertEquals(response.status_code, 201)
-        #  self.assertDictContains(ong, ongResponse)
 
     def test_get_ong(self):
         ong = OngDocument(name='ONG 1', description='Lorem Ipsum').save()
