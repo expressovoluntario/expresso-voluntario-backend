@@ -3,13 +3,20 @@ from __future__ import absolute_import
 
 from flask import Blueprint
 from flask_restful import Api, Resource, reqparse, abort
-from flask.ext.login import login_user
+from flask.ext.login import login_user, logout_user
 from mongoengine import DoesNotExist
 from .documents import UserDocument
 from ong.documents import OngDocument
 
 user_blueprint = Blueprint('user', __name__)
 api = Api(user_blueprint)
+
+
+@api.resource('/user/logout/')
+class UserLogoutResource(Resource):
+
+    def get(self):
+        logout_user()
 
 
 @api.resource('/user/login/')
@@ -31,8 +38,7 @@ class UserLoginResource(Resource):
             if user.check_password(password):
                 login_user(user)
                 return 200
-            else:
-                abort(401)
+            abort(401)
 
 
 @api.resource('/user/', '/user/<string:id>')
