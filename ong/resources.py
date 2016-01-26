@@ -9,6 +9,7 @@ ong_blueprint = Blueprint('ong', __name__)
 api = Api(ong_blueprint)
 
 
+@api.resource('/ong/', '/ong/<string:id>')
 class OngResource(Resource):
 
     def get(self, id=None):
@@ -62,8 +63,3 @@ class OngResource(Resource):
             return ong_document.to_dict(), 201
 
         return ong_document.to_dict(), 201
-
-api.add_resource(
-    OngResource,
-    '/ong/',
-    '/ong/<string:id>')
