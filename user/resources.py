@@ -3,13 +3,20 @@ from __future__ import absolute_import
 
 from flask import Blueprint
 from flask_restful import Api, Resource, reqparse, abort
-from flask.ext.login import login_user
+from flask.ext.login import login_user, logout_user
 from mongoengine import DoesNotExist
 from .documents import UserDocument
 from ong.documents import OngDocument
 
 user_blueprint = Blueprint('user', __name__)
 api = Api(user_blueprint)
+
+
+@api.resource('/user/logout/')
+class UserLogoutResource(Resource):
+
+    def get(self):
+        logout_user()
 
 
 @api.resource('/user/login/')
@@ -31,8 +38,7 @@ class UserLoginResource(Resource):
             if user.check_password(password):
                 login_user(user)
                 return 200
-            else:
-                abort(401)
+            abort(401)
 
 
 @api.resource('/user/', '/user/<string:id>')
@@ -59,6 +65,7 @@ class UserResource(Resource):
         parser.add_argument('email', required=True, type=str)
         parser.add_argument('password', required=True, type=str)
         parser.add_argument('ong_id', required=True, type=str)
+        # TODO: @willianribeiro: ong_id nao eh um parametro obrigratorio
         args = parser.parse_args(strict=True)
 
         name = args.get('name')
@@ -86,15 +93,11 @@ class UserResource(Resource):
         parser.add_argument('name', type=str)
         parser.add_argument('email', type=str)
         args = parser.parse_args(strict=True)
-
         name = args.get('name')
         email = args.get('email')
 
-        to_update = {key: value for key, value in args.items()if value is not None}
-        ong_document = OngDocument.objects.get_or_404(id=id)
-
-        if to_update:
-            ong_document.update(**to_update)
-            return ong_document.to_dict(), 201
-
-        return ong_document.to_dict(), 201
+        user_document = UserDocument.objects.get_or_404(id=id)
+        user_document.name = name
+        user_document.email = email
+        user_document.save()
+        return user_document.to_dict(), 200
