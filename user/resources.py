@@ -93,15 +93,11 @@ class UserResource(Resource):
         parser.add_argument('name', type=str)
         parser.add_argument('email', type=str)
         args = parser.parse_args(strict=True)
-
         name = args.get('name')
         email = args.get('email')
 
-        to_update = {key: value for key, value in args.items()if value is not None}
-        ong_document = OngDocument.objects.get_or_404(id=id)
-
-        if to_update:
-            ong_document.update(**to_update)
-            return ong_document.to_dict(), 201
-
-        return ong_document.to_dict(), 201
+        user_document = UserDocument.objects.get_or_404(id=id)
+        user_document.name = name
+        user_document.email = email
+        user_document.save()
+        return user_document.to_dict(), 200

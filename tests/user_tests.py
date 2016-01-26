@@ -65,6 +65,34 @@ class UserTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 204)
 
+    def test_delete_user_insufficient_params(self):
+        response = self.client.delete('/user/')
+        decoded_response = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(decoded_response, {"message": "You must provide an id"})
+
+    def test_put_user_insufficient_params(self):
+        response = self.client.put('/user/')
+        decoded_response = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 400)
+        self.assertDictEqual(decoded_response, {"message": "You must provide an id"})
+
+    def test_put_user(self):
+        data = {"name": "newname", "email": "new@email.com"}
+        response = self.client.put('/user/{id}'.format(id=self.user.id), data=data)
+        user = UserDocument.objects.get(id=self.user.id)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(user.name, data['name'])
+        self.assertEqual(user.email, data['email'])
+
+    def test_put_not_found_user(self):
+        response = self.client.put("/user/1012")
+
+        self.assertEqual(response.status_code, 404)
+
 
 class LoginTests(unittest.TestCase):
 
