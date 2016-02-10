@@ -76,5 +76,5 @@ class OngTests(unittest.TestCase):
 
     def test_put_ong_without_pass_id(self):
         ong = {'name': 'Expresso Voluntário', 'description': 'Unindo ONGs e voluntários'}
-        response = self.client.put('/ong/{id}'.format('fake_id'), data=json.dumps(ong))
+        response = self.client.put('/ong/{id}'.format(id='fake_id'), data=json.dumps(ong))
         self.assertEquals(response.status_code, 400)
