@@ -62,18 +62,16 @@ class OngTests(unittest.TestCase):
         response = self.client.delete('/ong/')
         self.assertEquals(response.status_code, 400)
 
-    # def test_put_ong(self):
-    #     ong = {'name': 'Expresso Voluntário', 'description': 'Unindo ONGs e voluntários'}
-    #     response = self.client.post('/ong/', data=ong)
-    #     self.assertEquals(response.status_code, 201)
-    #
-    #     data_decoded = response.data.decode()
-    #     ong_modified = json.loads(data_decoded)
-    #     ong_modified['name'] = 'Expresso Voluntário Modified'
-    #     print('/ong/{id}'.format(id=ong_modified['id']))
-    #     print(ong_modified)
-    #     response_2 = self.client.put('/ong/{id}'.format(id=ong_modified['id']), data=json.dumps(ong_modified))
-    #     self.assertEquals(response_2.status_code, 201)
+    def test_put_ong(self):
+        ong = {'name': 'Expresso Voluntário', 'description': 'Unindo ONGs e voluntários'}
+        response = self.client.post('/ong/', data=ong)
+        self.assertEquals(response.status_code, 201)
+
+        data_decoded = response.data.decode()
+        ong_modified = json.loads(data_decoded)
+        ong_modified['name'] = 'Expresso Voluntário Modified'
+        response_2 = self.client.put('/ong/{id}'.format(id=ong_modified['id']), data=json.dumps(ong_modified))
+        self.assertEquals(response_2.status_code, 201)
     #     self.assertNotEquals(response.data.name, response_2.data.name)
 
     # def test_put_ong_without_pass_id(self):
