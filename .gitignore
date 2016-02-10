@@ -6,3 +6,4 @@ update
 htmlcov
 .tox
 .coverage
+/**/*.pyc

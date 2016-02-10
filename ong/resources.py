@@ -35,8 +35,10 @@ class OngResource(Resource):
         name = args.get('name')
         description = args.get("description", None)
 
-        ong = OngDocument(name=name, description=description).save()
+        if name is None:
+            abort(400, message="You must provide name")
 
+        ong = OngDocument(name=name, description=description).save()
         return ong.to_dict(), 201
 
     def delete(self, id=None):
@@ -55,7 +57,7 @@ class OngResource(Resource):
         parser.add_argument('description', type=str)
         args = parser.parse_args(strict=True)
 
-        to_update = {key: value for key, value in args.items()if value is not None}
+        to_update = {key: value for key, value in args.items() if value is not None}
         ong_document = OngDocument.objects.get_or_404(id=id)
 
         if to_update:
