@@ -97,6 +97,7 @@ class UserTests(unittest.TestCase):
 class LoginTests(unittest.TestCase):
 
     def setUp(self):
+        UserDocument.drop_collection()
         self.user = UserDocument(name="iury", email="iury@gmail.com", _password="blabla").save()
 
     def tearDown(self):
