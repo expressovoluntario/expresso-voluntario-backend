@@ -1,6 +1,7 @@
+# coding: utf-8
+
 import unittest
 import json
-import copy
 from app import app
 from ong.documents import OngDocument
 
@@ -72,7 +73,7 @@ class OngTests(unittest.TestCase):
         ong_modified['name'] = 'Expresso Voluntário Modified'
         _id = ong_modified['id']
         del ong_modified['id']
-        response_2 = self.client.put('/ong/{id}'.format(id=_id), data=json.dumps(ong_modified))
+        response_2 = self.client.put('/ong/{id}'.format(id=_id), data=ong_modified)
         data_decoded_2 = response_2.data.decode()
         self.assertEquals(response_2.status_code, 201)
 

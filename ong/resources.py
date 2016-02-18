@@ -57,11 +57,12 @@ class OngResource(Resource):
         parser.add_argument('description', type=str)
         args = parser.parse_args(strict=True)
 
-        to_update = {key: value for key, value in args.items() if value is not None}
+        name = args.get("name")
+        description = args.get("description")
         ong_document = OngDocument.objects.get_or_404(id=id)
 
-        if to_update:
-            ong_document.update(**to_update)
-            return ong_document.to_dict(), 201
+        ong_document.name = name
+        ong_document.description = description
+        ong_document.save()
 
         return ong_document.to_dict(), 201
