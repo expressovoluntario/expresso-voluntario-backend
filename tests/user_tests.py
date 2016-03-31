@@ -23,7 +23,7 @@ class UserTests(unittest.TestCase):
 
         self.assertEquals(decoded_response, self.user.to_dict())
 
-    def test_get_inexistent_user(self):
+    def test_get_nonexistent_user(self):
         id_ = '123abc'
         response = self.client.get("/user/{id}".format(id=id_))
 

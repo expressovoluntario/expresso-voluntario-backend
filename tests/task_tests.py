@@ -65,7 +65,7 @@ class TaskTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 404)
 
-    def test_get_task_without_id(self):
+    def test_get_task_without_pass_id(self):
         response = self.client.get("/task/")
 
         self.assertEqual(response.status_code, 400)
@@ -90,13 +90,13 @@ class TaskTests(unittest.TestCase):
         self.assertEqual(updated_task.title, data['title'])
         self.assertEqual(updated_task.description, data['description'])
 
-    def test_put_inexistent_task(self):
+    def test_put_nonexistent_task(self):
         id_ = '12345'
         response = self.client.put("/task/{id}".format(id=id_))
 
         self.assertEqual(response.status_code, 404)
 
-    def test_put_task_without_params(self):
+    def test_put_task_without_pass_id(self):
         response = self.client.put("/task/")
         decoded_response_data = json.loads(response.data.decode())
 
