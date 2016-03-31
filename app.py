@@ -1,6 +1,7 @@
 from flask import Flask
 from flask.ext.mongoengine import MongoEngine
 from flask.ext.login import LoginManager
+from flask.ext.cors import CORS
 
 # cria o  app
 app = Flask(__name__)
@@ -8,6 +9,16 @@ app = Flask(__name__)
 # configura o app a partir do settings
 app.config.from_object('settings')
 
+# configura cors
+enable_cors = app.config.get("ENABLE_CORS", False)
+if enable_cors:
+    CORS(app, resources={
+        r"/ong/*": {"origins": "*"},
+        r"/user/*": {"origins": "*"},
+        r"/task/*": {"origins": "*"}
+    })
+
+# configura login manager
 login_manager = LoginManager()
 login_manager.init_app(app)
 
