@@ -27,11 +27,11 @@ class OngDocument(db.Document):
             'updatedAt': self.updatedAt.strftime("%Y-%m-%d %H:%M:%S"),
             'name': self.name,
             'description': self.description,
-            'purpose' : self.purpose,
-            'phone1' : self.phone1,
-            'phone2' : self.phone2,
-            'email' : self.email,
-            'site' : self.site,
-            'logoUrl' : self.logoUrl,
-            'tasks' : str(self.tasks)
+            'purpose': self.purpose,
+            'phone1': self.phone1,
+            'phone2': self.phone2,
+            'email': self.email,
+            'site': self.site,
+            'logoUrl': self.logoUrl,
+            'tasks': str(self.tasks)
         }

@@ -9,7 +9,7 @@ class TaskDocument(db.Document):
     description = db.StringField(required=True)
     status = db.StringField()
     recurrence = db.BooleanField()
-    tags = db.ListField(db.StringField()) #TODO: alterar para linha abaixo quando TagDocument estiver ok
+    tags = db.ListField(db.StringField())  # TODO: alterar para linha abaixo quando TagDocument estiver ok
     # tags = db.ListField(db.ReferenceField(TagDocument, reverse_delete_rule=mongoengine.PULL))
 
     def to_dict(self):
@@ -21,5 +21,5 @@ class TaskDocument(db.Document):
             'description': self.description,
             'status': self.status,
             'recurrence': self.recurrence,
-            'tags': self.tags #TODO: Isso aqui é assim mesmo?
+            'tags': self.tags  # TODO: Isso aqui é assim mesmo?
         }
