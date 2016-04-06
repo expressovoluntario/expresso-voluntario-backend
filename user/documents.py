@@ -9,7 +9,7 @@ from ong.documents import OngDocument
 class UserDocument(db.Document, UserMixin):
     createdAt = db.DateTimeField(default=datetime.datetime.now)
     updatedAt = db.DateTimeField(default=datetime.datetime.now)
-    name = db.StringField(required=True)
+    name = db.StringField(required)
     email = db.StringField(required=True, unique=True)
     _password = db.BinaryField(required=True, max_length=255)
     ong_id = db.ReferenceField(OngDocument, reverse_delete_rule=mongoengine.PULL)
