@@ -9,7 +9,7 @@ from ong.documents import OngDocument
 class UserDocument(db.Document, UserMixin):
     createdAt = db.DateTimeField(default=datetime.datetime.now)
     updatedAt = db.DateTimeField(default=datetime.datetime.now)
-    name = db.StringField(required)
+    name = db.StringField()
     email = db.StringField(required=True, unique=True)
     _password = db.BinaryField(required=True, max_length=255)
     ong_id = db.ReferenceField(OngDocument, reverse_delete_rule=mongoengine.PULL)
@@ -41,10 +41,11 @@ class UserDocument(db.Document, UserMixin):
     def to_dict(self):
         return {
             'id': self.get_id(),
+            '_id': self.get_id(),
             'createdAt': self.createdAt.strftime("%Y-%m-%d %H:%M:%S"),
             'updatedAt': self.updatedAt.strftime("%Y-%m-%d %H:%M:%S"),
             'name': self.name,
             'email': self.email,
-            'ong_id': str(self.ong_id),
+            'ong_id': str(self.ong_id.id),
             'is_authenticated': self.is_authenticated
         }

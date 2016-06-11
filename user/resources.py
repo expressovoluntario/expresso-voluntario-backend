@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 from flask import Blueprint
 from flask_restful import Api, Resource, reqparse, abort
-from flask.ext.login import login_user, logout_user
+from flask.ext.login import login_user, logout_user, current_user
 from mongoengine import DoesNotExist
 from .documents import UserDocument
 from ong.documents import OngDocument
@@ -36,8 +36,9 @@ class UserLoginResource(Resource):
             abort(401)
         else:
             if user.check_password(password):
-                login_user(user)
-                return 200
+                login_user(user, remember=True)
+                print(current_user)
+                return user.to_dict(), 200
             abort(401)
 
 
@@ -61,12 +62,13 @@ class UserResource(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('name', required=True, type=str)
+        # parser.add_argument('name', required=True, type=str)
         parser.add_argument('email', required=True, type=str)
         parser.add_argument('password', required=True, type=str)
         parser.add_argument('ong_id', required=True, type=str)
         # TODO: @willianribeiro: ong_id nao eh um parametro obrigratorio
-        args = parser.parse_args(strict=True)
+        # args = parser.parse_args(strict=True)
+        args = parser.parse_args()
 
         name = args.get('name')
         email = args.get('email')
@@ -101,3 +103,18 @@ class UserResource(Resource):
         user_document.email = email
         user_document.save()
         return user_document.to_dict(), 200
+
+    def load_user_by_login(self):
+        return
+
+
+@api.resource('/user/logged')
+class Logged(Resource):
+
+    def get(self):
+        try:
+            dict = current_user.to_dict()
+            return {"logged": dict}
+            # return {"logged": current_user.to_dict()}
+        except AttributeError:
+            return {'logged': None}

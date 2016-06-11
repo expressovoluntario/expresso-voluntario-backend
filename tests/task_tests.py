@@ -8,11 +8,33 @@ from task.documents import TaskDocument
 class TaskTests(unittest.TestCase):
 
     def setUp(self):
+        self.maxDiff = None
         self.client = app.test_client()
-        self.task = TaskDocument(title='A title', description='A description').save()
+        self.task = TaskDocument(title='A title', description='A description', tags=['tag']).save()
+        TaskDocument(title='Another title', description='Another description', tags=['tag']).save()
+        TaskDocument(title='yet Another title', description='yet Another description').save()
 
     def tearDown(self):
         TaskDocument.drop_collection()
+
+    def test_search_by_tag(self):
+
+        response = self.client.get('/task/?tag={tag}'.format(tag='tag'))
+        content = json.loads(response.data.decode('utf-8'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(content), 2)
+        self.assertDictContainsSubset(
+                                      {
+                                          'description': 'A description',
+                                          'tags': ['tag'],
+                                          'title': 'A title'
+                                      }, content[0])
+        self.assertDictContainsSubset({
+                                          'description': 'Another description',
+                                          'tags': ['tag'],
+                                          'title': 'Another title'
+                                      }, content[1])
 
     def test_add_task(self):
         data = {'title': 'A cool task', 'description': 'Hasta la vista baby!'}
@@ -102,3 +124,7 @@ class TaskTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(decoded_response_data, {"message": "You must provide an id"})
+
+
+if __name__ == '__main__':
+    unittest.main()
