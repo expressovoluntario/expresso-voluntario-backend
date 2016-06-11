@@ -1,6 +1,10 @@
+# coding: utf-8
+
 import json
 import unittest
+
 from flask.ext.login import current_user, login_user
+
 from app import app
 from user.documents import UserDocument
 from ong.documents import OngDocument
@@ -10,8 +14,11 @@ class UserTests(unittest.TestCase):
 
     def setUp(self):
         self.client = app.test_client()
-        self.user = UserDocument(name="iury", email="iury@gmail.com", _password="blabla").save()
         self.ong = OngDocument(name='ong', description='The coolest ong').save()
+        self.user = UserDocument(name="iury",
+                                 email="iury@gmail.com",
+                                 _password="blabla",
+                                 ong_id=self.ong.id).save()
 
     def tearDown(self):
         UserDocument.drop_collection()
@@ -30,7 +37,9 @@ class UserTests(unittest.TestCase):
         self.assertEquals(response.status_code, 404)
 
     def test_get_many_users(self):
-        UserDocument(name='willian', email='william@ribeiro.com', _password='willfix').save()
+        UserDocument(name='willian', email='william@ribeiro.com',
+                     _password='willfix',
+                     ong_id=self.ong.id).save()
         limit = 10
         response = self.client.get("/user/?limit={limit}".format(limit=limit))
         decoded_response = json.loads(response.data.decode())
@@ -98,7 +107,11 @@ class LoginTests(unittest.TestCase):
 
     def setUp(self):
         UserDocument.drop_collection()
-        self.user = UserDocument(name="iury", email="iury@gmail.com", _password="blabla").save()
+        self.ong = OngDocument(name='ong', description='The coolest ong').save()
+        self.user = UserDocument(name="iury",
+                                 email="iury@gmail.com",
+                                 _password="blabla",
+                                 ong_id=self.ong.id).save()
 
     def tearDown(self):
         UserDocument.drop_collection()

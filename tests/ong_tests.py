@@ -66,20 +66,20 @@ class OngTests(unittest.TestCase):
     def test_put_ong(self):
         ong = {'name': 'Expresso Voluntário', 'description': 'Unindo ONGs e voluntários'}
         response = self.client.post('/ong/', data=ong)
-        data_decoded_1 = response.data.decode()
         self.assertEquals(response.status_code, 201)
 
+        data_decoded_1 = response.data.decode()
         ong_modified = json.loads(data_decoded_1)
         ong_modified['name'] = 'Expresso Voluntário Modified'
         _id = ong_modified['id']
         del ong_modified['id']
-        response_2 = self.client.put('/ong/{id}'.format(id=_id), data=ong_modified)
+        response_2 = self.client.put('/ong/{id}'.format(id=_id),
+                                     data=json.dumps(ong_modified))
         data_decoded_2 = response_2.data.decode()
         self.assertEquals(response_2.status_code, 201)
 
-        ong1 = json.loads(data_decoded_1)
         ong2 = json.loads(data_decoded_2)
-        self.assertNotEquals(ong1['name'], ong2['name'])
+        self.assertNotEquals(ong_modified['name'], ong2['name'])
 
     def test_put_ong_nonexistent_id(self):
         ong = {'name': 'Expresso Voluntário', 'description': 'Unindo ONGs e voluntários'}

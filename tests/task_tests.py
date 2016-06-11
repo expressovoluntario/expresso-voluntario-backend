@@ -3,6 +3,7 @@ import unittest
 import mongoengine
 from app import app
 from task.documents import TaskDocument
+from ong.documents import OngDocument
 
 
 class TaskTests(unittest.TestCase):
@@ -37,9 +38,16 @@ class TaskTests(unittest.TestCase):
                                       }, content[1])
 
     def test_add_task(self):
-        data = {'title': 'A cool task', 'description': 'Hasta la vista baby!'}
+        ong = OngDocument(name="Ongzinha", description="Uma ongzinha").save()
+        data = {'title': 'A cool task',
+                'description': 'Hasta la vista baby!',
+                'status': 'NEW',
+                'ong_id': ong.id
+                }
         response = self.client.post('/task/', data=data)
-        task = TaskDocument.objects.get(**data)
+        task = TaskDocument.objects(
+            title=data['title'],
+            description=data['description']).get()
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(task.title, data['title'])
@@ -93,14 +101,10 @@ class TaskTests(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_list_tasks(self):
-        another_task = TaskDocument(title="Another task", description="Another Description").save()
         response = self.client.get("/task/?limit=2")
         response_data_decoded = json.loads(response.data.decode())
-
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response_data_decoded, [
-            self.task.to_dict(), another_task.to_dict()
-        ])
+        self.assertEqual(len(response_data_decoded), 2)
 
     def test_put_task(self):
         data = {"title": "New title", "description": "New Description"}
