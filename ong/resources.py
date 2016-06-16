@@ -29,11 +29,9 @@ class OngResource(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, required=True, help='You must provide name')
-        parser.add_argument('description', type=str, required=True)
         args = parser.parse_args(strict=True)
         name = args.get('name')
-        description = args.get("description")
-        if not all([name, description]):
+        if name is None:
             abort(400, message="You must provide name")
 
         ong = OngDocument(name=name).save()
