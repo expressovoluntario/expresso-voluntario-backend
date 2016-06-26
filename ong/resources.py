@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
-
 from flask import Blueprint
+from flask.ext.login import login_required
 from flask_restful import Api, Resource, reqparse, abort
 from .documents import OngDocument
 
@@ -12,6 +12,7 @@ api = Api(ong_blueprint)
 @api.resource('/ong/', '/ong/<string:id>')
 class OngResource(Resource):
 
+    @login_required
     def get(self, id=None):
         parser = reqparse.RequestParser()
         parser.add_argument('limit', type=int)
@@ -26,10 +27,11 @@ class OngResource(Resource):
 
         abort(400, message="You must provide limit or id")
 
+    @login_required
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('name', type=str, required=True, help='You must provide name')
-        args = parser.parse_args(strict=True)
+        args = parser.parse_args()
         name = args.get('name')
         if name is None:
             abort(400, message="You must provide name")
@@ -37,6 +39,7 @@ class OngResource(Resource):
         ong = OngDocument(name=name).save()
         return ong.to_dict(), 201
 
+    @login_required
     def delete(self, id=None):
         if id is not None:
             ong_document = OngDocument.objects.get_or_404(id=id)
@@ -44,6 +47,7 @@ class OngResource(Resource):
             return None, 204
         abort(400, message="You must provide an id")
 
+    @login_required
     def put(self, id=None):
         if id is None:
             abort(400, message="You must provide an id")
@@ -67,10 +71,8 @@ class OngResource(Resource):
         phone1 = args.get("phone1", None)
         phone2 = args.get("phone2", None)
         email = args.get("email", None)
-        site = args.get("site", None)
         address = args.get("address", None)
         addressNumber = args.get("addressNumber", None)
-        logoUrl = args.get("logoUrl", None)
 
         ong_document = OngDocument.objects.get_or_404(id=id)
 
@@ -92,17 +94,22 @@ class OngResource(Resource):
         if email is not None:
             ong_document.email = email
 
-        if site is not None:
-            ong_document.site = site
-
         if address is not None:
             ong_document.address = address
 
         if addressNumber is not None:
             ong_document.addressNumber = addressNumber
 
-        if logoUrl is not None:
-            ong_document.logoUrl = logoUrl
-
         ong_document.save()
         return ong_document.to_dict(), 201
+
+
+        # if site is not None:
+        #     ong_document.site = site
+        #
+        # if logoUrl is not None:
+        #     ong_document.logoUrl = logoUrl
+        # site = args.get("site", None)
+        # logoUrl = args.get("logoUrl", None)
+
+

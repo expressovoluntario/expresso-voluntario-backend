@@ -6,17 +6,9 @@ from flask_restful import Api, Resource, reqparse, abort
 from flask.ext.login import login_user, logout_user, current_user
 from mongoengine import DoesNotExist
 from .documents import UserDocument
-from ong.documents import OngDocument
 
 user_blueprint = Blueprint('user', __name__)
 api = Api(user_blueprint)
-
-
-@api.resource('/user/logout/')
-class UserLogoutResource(Resource):
-
-    def get(self):
-        logout_user()
 
 
 @api.resource('/user/login/')
@@ -37,9 +29,15 @@ class UserLoginResource(Resource):
         else:
             if user.check_password(password):
                 login_user(user, remember=True)
-                print(current_user)
                 return user.to_dict(), 200
             abort(401)
+
+
+@api.resource('/user/logout/')
+class UserLogoutResource(Resource):
+
+    def get(self):
+        logout_user()
 
 
 @api.resource('/user/', '/user/<string:id>')
@@ -66,7 +64,6 @@ class UserResource(Resource):
         parser.add_argument('email', required=True, type=str)
         parser.add_argument('password', required=True, type=str)
         parser.add_argument('ong_id', required=True, type=str)
-        # TODO: @willianribeiro: ong_id nao eh um parametro obrigratorio
         # args = parser.parse_args(strict=True)
         args = parser.parse_args()
 

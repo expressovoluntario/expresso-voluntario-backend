@@ -1,8 +1,8 @@
-import datetime, json
+import datetime
+import json
 import mongoengine
-from flask.json import jsonify
 from task.documents import TaskDocument
-from app import db #Objeto do Flask Mongo-Engine
+from app import db  # --> Objeto do Flask Mongo-Engine
 
 
 class OngDocument(db.Document):
@@ -10,15 +10,15 @@ class OngDocument(db.Document):
     updatedAt = db.DateTimeField(default=datetime.datetime.now)
     name = db.StringField(required=True)
     description = db.StringField()
-    purpose = db.StringField()
     phone1 = db.StringField()
     phone2 = db.StringField()
     email = db.StringField()
-    site = db.StringField()
     address = db.DictField()
     addressNumber = db.StringField()
-    logoUrl = db.StringField()
     tasks = db.ListField(db.ReferenceField(TaskDocument, reverse_delete_rule=mongoengine.PULL))
+    # purpose = db.StringField()
+    # site = db.StringField()
+    # logoUrl = db.StringField()
 
     indexes = {
         'tasks': tasks

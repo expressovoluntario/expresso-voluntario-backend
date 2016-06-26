@@ -3,37 +3,40 @@ from flask.ext.mongoengine import MongoEngine
 from flask.ext.login import LoginManager
 from flask.ext.cors import CORS
 
-# cria o  app
+# Cria um app Flask
 app = Flask(__name__)
 
-# configura o app a partir do settings
+# Configura o app a partir do arquivo de configurações (settings.py)
 app.config.from_object('settings')
 
-# configura cors
+# Configura o suporte ao CORS (Cross-Origin Resource Sharing)
 enable_cors = app.config.get("ENABLE_CORS", False)
 if enable_cors:
     CORS(app, resources={
         r"/ong/*": {"origins": "*"},
         r"/user/*": {"origins": "*"},
-        r"/task/*": {"origins": "*"}
+        r"/task/*": {"origins": "*"},
+        r"/search/*": {"origins": "*"}
     })
 
-# configura login manager
+# Configura o LoginManager do FlaskLogin
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# configura o banco
+# Configura o banco de dados
 db = MongoEngine(app)
 
 from ong.resources import ong_blueprint
 from task.resources import task_blueprint
 from user.resources import user_blueprint
+from search.resources import search_blueprint
 from user.documents import UserDocument
 
-# registra os blueprints
+# Registra os blueprints
 app.register_blueprint(ong_blueprint)
 app.register_blueprint(task_blueprint)
 app.register_blueprint(user_blueprint)
+app.register_blueprint(search_blueprint)
 
 
 @login_manager.user_loader
